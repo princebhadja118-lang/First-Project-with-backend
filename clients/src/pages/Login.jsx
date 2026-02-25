@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../auth/AuthContext'
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -7,6 +8,11 @@ const Login = () => {
     const [message, setMessage] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
     const [showPass, setShowPass] = useState(false)
+
+    const { user, login } = useContext(AuthContext)
+
+
+    const navigate = useNavigate()
 
     const handleLogin = async () => {
         try {
@@ -17,8 +23,15 @@ const Login = () => {
             });
             const data = await res.json();
             if (res.ok) {
+                login(data.user);
                 setMessage('Login successful!')
                 setIsSuccess(true)
+                if (data.user.role === "admin") {
+                    navigate('/admin')
+                } else {
+                    navigate("/dashboard")
+                }
+
             } else {
                 setMessage(data.message || "Login failed.")
                 setIsSuccess(false)
@@ -55,13 +68,13 @@ const Login = () => {
                             onChange={(e) => setPass(e.target.value)}
                             className='w-full px-4 py-3 focus:outline-none '
                         />
-                        <button onClick={handleshowpass} className='pr-2'>
+                        <button onClick={handleshowpass} className='pr-2  cursor-pointer'>
                             {showPass ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}
                         </button>
                     </div>
                     <button
                         onClick={handleLogin}
-                        className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg hover:shadow-xl'
+                        className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg hover:shadow-xl cursor-pointer'
                     >
                         Login
                     </button>

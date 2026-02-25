@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Register = () => {
 
-    // const { login, user } = useContext(AuthContext)
     const [message, setMessage] = useState("")
     const [sucessMessage, setSucessMessage] = useState("")
     const [userName, setUserName] = useState("")
@@ -15,10 +14,6 @@ const Register = () => {
     const navigate = useNavigate()
 
     const handleRegister = async () => {
-        // login({
-        //     email, pass, role: "admin"
-        // })
-        // console.log(user);
         try {
             const res = await fetch('http://localhost:5000/register', {
                 method: "POST",
@@ -76,11 +71,13 @@ const Register = () => {
                             onChange={(e) => setPass(e.target.value)}
                             className='px-3 py-3 border-r-0 rounded-r-none w-full focus:outline-none'
                         />
-                        <button onClick={handleshowpass} className='pr-2'>
+                        <button onClick={handleshowpass} className='pr-2  cursor-pointer'>
                             {showPass ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}
                         </button>
                     </div>
-                    <button onClick={handleRegister} className='bg-blue-600 rounded-lg px-3 py-3 w-full font-bold text-white hover:bg-blue-700'>Register</button>
+                    <button onClick={handleRegister} className='bg-blue-600 rounded-lg px-3 py-3 w-full font-bold text-white hover:bg-blue-700 cursor-pointer'>
+                        Register
+                    </button>
                     {message && <p className='text-red-600'>{message}</p>}
                     {sucessMessage && <p className='text-green-600'>{sucessMessage}</p>}
                     <p className='text-gray-600 m-2'>Already have an account?
