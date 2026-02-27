@@ -4,6 +4,7 @@ import logo from "../../assets/rklogo-removebg-preview.png"
 import Home from './Home'
 import About from './About'
 import Products from './Products'
+import { NavLink, Outlet } from 'react-router-dom'
 
 
 const Dashboard = () => {
@@ -24,30 +25,29 @@ const Dashboard = () => {
                             <i className="fa-solid fa-magnifying-glass"></i>
                             <input type="search" placeholder='Search...' className='px-3 py-2 bg-transparent border-0 outline-0 rounded' />
                         </div>
-                        <a>Home</a>
-                        <a>Products</a>
-                        <a>About</a>
-                        <a>Contact</a>
+                        <NavLink to='home'>Home</NavLink>
+                        <NavLink to='about'>About</NavLink>
+                        <NavLink to='uproduct'>Products</NavLink>
+                        <NavLink>Contact</NavLink>
                     </div>
                     <div className='md:flex hidden  md:gap-3 items-center shadow px-2 bg-red-600 hover:shadow-lg hover:bg-red-700'>
-                        <code className='text-2xl text-black p-5 font-bold '>{user?.username}</code>
+                        <code className='text-2xl text-black p-5 font-semibold '>{user?.username}</code>
                         <button onClick={logout} className='bg-white font-bold text-red-500 px-4 py-2 h-10 rounded cursor-pointer'>
                             Logout
                         </button>
-
                     </div>
 
                     {menu && (
                         <div className='md:hidden'>
                             <div className='md:flex-row flex flex-col items-center md:gap-5 transition-all duration-300 '>
                                 <div className='bg-red-300 px-3 flex items-center'>
-                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <i className="fa-solid fa-magnifying-glass"></i>
                                     <input type="search" placeholder='Search...' className='px-3 py-2 bg-transparent border-0 outline-0 rounded' />
                                 </div>
-                                <a>Home</a>
-                                <a>Products</a>
-                                <a>About</a>
-                                <a>Contact</a>
+                                <NavLink to='home'>Home</NavLink>
+                                <NavLink to='about'>About</NavLink>
+                                <NavLink to='uproduct'>Products</NavLink>
+                                <NavLink>Contact</NavLink>
                             </div>
                             <div className='flex flex-col md:flex-row md:gap-3 items-center '>
                                 <code className='text-2xl text-black p-2 font-bold '>{user?.username}</code>
@@ -58,9 +58,12 @@ const Dashboard = () => {
                         </div>
                     )}
                 </div>
-                <Home />
-                <About />
-                <Products />
+                <main>
+                    <Home />
+                    <About />
+                    <Products />
+                </main>
+
             </div>
 
         </>

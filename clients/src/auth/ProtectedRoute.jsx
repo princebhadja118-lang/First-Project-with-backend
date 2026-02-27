@@ -6,13 +6,16 @@ import { AuthContext } from './AuthContext'
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
     const { user } = useContext(AuthContext)
+    const isLogged = localStorage.getItem('logged')
+    if (!isLogged) {
 
-    if (!user) {
-        return <Navigate to="/login" replace />
-    }
+        if (!user) {
+            return <Navigate to="/login" replace />
+        }
 
-    if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-        return <Navigate to="/unauthorized" replace />
+        if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+            return <Navigate to="/unauthorized" replace />
+        }
     }
 
     return children

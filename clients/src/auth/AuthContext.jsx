@@ -9,7 +9,10 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
     };
 
-    const logout = () => setUser(null);
+    const logout = () => {
+        setUser(null)
+        localStorage.removeItem('logged')
+    };
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>

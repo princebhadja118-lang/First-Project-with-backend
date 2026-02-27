@@ -4,12 +4,12 @@ import { AuthContext } from '../auth/AuthContext'
 
 const Login = () => {
     const [email, setEmail] = useState("")
-    const [pass, setPass] = useState("")
+    const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
-    const [showPass, setShowPass] = useState(false)
+    const [showpassword, setShowpassword] = useState(false)
 
-    const { user, login } = useContext(AuthContext)
+    const { login } = useContext(AuthContext)
 
 
     const navigate = useNavigate()
@@ -19,15 +19,16 @@ const Login = () => {
             const res = await fetch('http://localhost:5000/login', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, pass })
+                body: JSON.stringify({ email, password })
             });
             const data = await res.json();
             if (res.ok) {
+                localStorage.setItem('logged', 'true')
                 login(data.user);
                 setMessage('Login successful!')
                 setIsSuccess(true)
                 if (data.user.role === "admin") {
-                    navigate('/admin')
+                    navigate('/admin/profile')
                 } else {
                     navigate("/dashboard")
                 }
@@ -42,15 +43,15 @@ const Login = () => {
         }
     }
 
-    const handleshowpass = () => {
-        if (showPass === false) return setShowPass(true)
-        else return setShowPass(false)
+    const handleshowpassword = () => {
+        if (showpassword === false) return setShowpassword(true)
+        else return setShowpassword(false)
     }
 
     return (
         <div className='min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4'>
-            <div className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md'>
-                <h1 className='text-4xl font-bold text-center text-gray-800 mb-8'>Welcome Back</h1>
+            <div className='bg-white rounded-2xl shadow-2xl p-4 md:p-8 w-full max-w-md'>
+                <h1 className='text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8'>Welcome Back</h1>
 
                 <div className='space-y-4'>
                     <input
@@ -62,14 +63,14 @@ const Login = () => {
                     />
                     <div className='flex border border-gray-300 rounded-lg focus:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus:border-transparent transition'>
                         <input
-                            type={showPass ? 'text' : 'password'}
+                            type={showpassword ? 'text' : 'password'}
                             placeholder='Password'
-                            value={pass}
-                            onChange={(e) => setPass(e.target.value)}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             className='w-full px-4 py-3 focus:outline-none '
                         />
-                        <button onClick={handleshowpass} className='pr-2  cursor-pointer'>
-                            {showPass ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}
+                        <button onClick={handleshowpassword} className='pr-2  cursor-pointer'>
+                            {showpassword ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}
                         </button>
                     </div>
                     <button
@@ -86,7 +87,7 @@ const Login = () => {
                     </p>
                 )}
 
-                <p className='mt-6 text-center text-gray-600'>
+                <p className='mt-6 text-center text-sm md:text-lg text-gray-600'>
                     New User? <Link className='text-blue-600 font-semibold hover:underline' to='/register'>Start Your Journey</Link> with us!
                 </p>
             </div>
