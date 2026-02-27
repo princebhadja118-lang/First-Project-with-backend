@@ -24,7 +24,7 @@ const Login = () => {
             const data = await res.json();
             if (res.ok) {
                 localStorage.setItem('logged', 'true')
-                login(data.user);
+                login({ ...data.user, token: data.token });
                 setMessage('Login successful!')
                 setIsSuccess(true)
                 if (data.user.role === "admin") {
@@ -32,7 +32,6 @@ const Login = () => {
                 } else {
                     navigate("/dashboard")
                 }
-
             } else {
                 setMessage(data.message || "Login failed.")
                 setIsSuccess(false)
