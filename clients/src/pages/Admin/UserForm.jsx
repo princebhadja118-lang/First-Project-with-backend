@@ -1,39 +1,32 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../../auth/AuthContext";
+import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 
-const AdminProfile = ({ setShowUForm }) => {
-  const { user, login } = useContext(AuthContext);
-
-  const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
+const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
+  const [username, setUsername] = useState(selectedUser?.username || "");
+  const [email, setEmail] = useState(selectedUser?.email || "");
+  const [role, setRole] = useState(selectedUser?.role || "");
 
   const handleUpdateData = async () => {
+    const admin = JSON.parse(localStorage.getItem("user"));
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/update/${user.id}`,
+        `http://localhost:5000/api/admin/update/${selectedUser._id}`,
         {
           method: "PUT",
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${admin.token}`,
           },
-          body: JSON.stringify({ username, email }),
+          body: JSON.stringify({ username, email, role }),
         },
       );
 
       const data = await res.json();
 
       if (res.ok) {
-        const updatedata = {
-          ...user,
-          username: data.user.username,
-          email: data.user.email,
-        };
-        login(updatedata);
-        localStorage.setItem("user", JSON.stringify(updatedata));
-        alert("Profile updated successfully");
-        setShowUForm(false);
+        alert("User updated successfully");
+        refreshUsers();
+        setShowForm(false);
       } else {
         alert(data.message || "Failed to Update Profile");
       }
@@ -53,7 +46,7 @@ const AdminProfile = ({ setShowUForm }) => {
             <div className="absolute flex justify-end items-end w-full pr-2">
               <button
                 className="cursor-pointer"
-                onClick={() => setShowUForm(false)}
+                onClick={() => setShowForm(false)}
               >
                 <IoClose size={25} md:size={35} />
               </button>
@@ -73,9 +66,16 @@ const AdminProfile = ({ setShowUForm }) => {
             onChange={(e) => setEmail(e.target.value)}
             className="border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
+          <input
+            type="text"
+            placeholder="Role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-e-transparent transition "
+          />
           <button
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white w-full rounded cursor-pointer"
             onClick={handleUpdateData}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white w-full rounded cursor-pointer"
           >
             Update
           </button>
@@ -85,4 +85,4 @@ const AdminProfile = ({ setShowUForm }) => {
   );
 };
 
-export default AdminProfile;
+export default UserForm;

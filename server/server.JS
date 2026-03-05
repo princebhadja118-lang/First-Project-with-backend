@@ -11,8 +11,7 @@ app.use(cors({
 app.use(express.json());
 
 connectDB()
-app.use("/", authRoutes);
-
+app.use("/api", authRoutes);
 
 app.listen(5000, (req, res) => {
     console.log("Server running on port 5000");

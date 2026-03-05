@@ -89,22 +89,24 @@ router.post('/login', async (req, res) => {
     }
 });
 
+//update
 router.put('/admin/update/:id', authMiddleware, async (req, res) => {
     try {
+        const { username, email, role } = req.body;
 
         if (req.user.id !== req.params.id && req.user.role !== "admin") {
             return res.status(403).json({ message: "You are not authorized to update this user" })
         }
-        const { username, email } = req.body;
         const updateuser = await User.findByIdAndUpdate(
             req.params.id,
-            { username, email },
-            { new: true }
-        );
+            { username, email, role },
+            { new: true, runValidators: true }
+        ).select('-password');
         if (!updateuser) {
             return res.status(404).json({ message: "User not found" });
         }
         res.json({
+            success: true,
             message: "User updated successfully",
             user: {
                 id: updateuser._id,
@@ -118,5 +120,36 @@ router.put('/admin/update/:id', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+//user Data 
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find().select('-password');
+        res.json(users)
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
+
+//Delete 
+router.delete('/admin/delete/:id', authMiddleware, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Only admin can delete users' })
+        }
+        const deleteduser = await User.findByIdAndDelete(req.params.id)
+
+        if (!deleteduser) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        res.json({
+            success: true,
+            message: 'User deleted successfully'
+        })
+
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error" })
+    }
+})
 
 module.exports = router;
