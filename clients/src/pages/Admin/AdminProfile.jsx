@@ -4,17 +4,10 @@ import { IoClose } from "react-icons/io5";
 
 const AdminProfile = ({ setShowUForm }) => {
 
-    const { user } = useContext(AuthContext)
+    const { user, login } = useContext(AuthContext)
 
     const [username, setUsername] = useState(user.username)
     const [email, setEmail] = useState(user.email)
-    const [password, setPassword] = useState('')
-    const [showPass, setShowPass] = useState(false)
-
-    const handleshowpass = () => {
-        if (showPass === false) return setShowPass(true)
-        else return setShowPass(false)
-    }
 
     const handleUpdateData = async () => {
         try {
@@ -25,13 +18,21 @@ const AdminProfile = ({ setShowUForm }) => {
                         "Content-type": "application/json",
                         "Authorization": `Bearer ${user.token}`
                     },
-                    body: JSON.stringify({ username, email, password })
+                    body: JSON.stringify({ username, email })
                 }
             );
 
             const data = await res.json();
 
             if (res.ok) {
+
+                const updatedata = {
+                    ...user,
+                    username: data.user.username,
+                    email: data.user.email
+                }
+                login(updatedata);
+                localStorage.setItem('user', JSON.stringify(updatedata));
                 alert('Profile updated successfully');
                 setShowUForm(false);
             } else {
@@ -68,18 +69,6 @@ const AdminProfile = ({ setShowUForm }) => {
                         onChange={(e) => setEmail(e.target.value)}
                         className='border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
                     />
-                    <div className='flex w-full px-3 py-3 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition'>
-                        <input
-                            type={showPass ? "text" : "password"}
-                            placeholder='New Password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className='w-full outline-none'
-                        />
-                        <button className='pr-2 cursor-pointer' onClick={handleshowpass}>
-                            {showPass ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}
-                        </button>
-                    </div>
                     <button className='px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white w-full rounded cursor-pointer' onClick={handleUpdateData}>Update</button>
                 </div>
             </div>

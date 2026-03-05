@@ -95,10 +95,10 @@ router.put('/admin/update/:id', authMiddleware, async (req, res) => {
         if (req.user.id !== req.params.id && req.user.role !== "admin") {
             return res.status(403).json({ message: "You are not authorized to update this user" })
         }
-        const { username, email, password } = req.body;
+        const { username, email } = req.body;
         const updateuser = await User.findByIdAndUpdate(
             req.params.id,
-            { username, email, password },
+            { username, email },
             { new: true }
         );
         if (!updateuser) {

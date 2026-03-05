@@ -14,7 +14,8 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault()
         try {
             const res = await fetch('http://localhost:5000/login', {
                 method: "POST",
@@ -23,7 +24,8 @@ const Login = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                localStorage.setItem('logged', 'true')
+
+                localStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }));
                 login({ ...data.user, token: data.token });
                 setMessage('Login successful!')
                 setIsSuccess(true)
@@ -52,7 +54,7 @@ const Login = () => {
             <div className='bg-white rounded-2xl shadow-2xl p-4 md:p-8 w-full max-w-md'>
                 <h1 className='text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8'>Welcome Back</h1>
 
-                <div className='space-y-4'>
+                <form className='space-y-4'>
                     <input
                         type='email'
                         placeholder='Email'
@@ -78,8 +80,7 @@ const Login = () => {
                     >
                         Login
                     </button>
-                </div>
-
+                </form>
                 {message && (
                     <p className={`mt-4 text-center font-medium ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
                         {message}
@@ -90,7 +91,8 @@ const Login = () => {
                     New User? <Link className='text-blue-600 font-semibold hover:underline' to='/register'>Start Your Journey</Link> with us!
                 </p>
             </div>
-        </div>
+
+        </div >
     )
 }
 
