@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import { IoClose } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 const AdminProfile = ({ setShowUForm }) => {
   const { user, login } = useContext(AuthContext);
@@ -32,10 +33,10 @@ const AdminProfile = ({ setShowUForm }) => {
         };
         login(updatedata);
         localStorage.setItem("user", JSON.stringify(updatedata));
-        alert("Profile updated successfully");
+        toast.success("Profile updated successfully");
         setShowUForm(false);
       } else {
-        alert(data.message || "Failed to Update Profile");
+        toast.error(data.message || "Failed to Update Profile");
       }
     } catch (err) {
       console.error("Error updating admin data:", err);

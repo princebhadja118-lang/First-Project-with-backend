@@ -31,7 +31,7 @@ const Login = () => {
         setMessage("Login successful!");
         setIsSuccess(true);
         if (data.user.role === "admin") {
-          navigate("/admin/profile");
+          navigate("/admin/Ahome");
         } else {
           navigate("/dashboard");
         }

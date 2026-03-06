@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 
 const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
@@ -24,11 +25,11 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("User updated successfully");
+        toast.success("User updated successfully");
         refreshUsers();
         setShowForm(false);
       } else {
-        alert(data.message || "Failed to Update Profile");
+        toast.error(data.message || "Failed to Update Profile");
       }
     } catch (err) {
       console.error("Error updating admin data:", err);
@@ -41,7 +42,7 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
         <div className="md:min-w-md flex flex-col gap-2 items-center justify-center p-3 fixed bg-white rounded shadow-2xl">
           <div className="flex justify-center items-center w-full ">
             <h1 className="text-xl md:text-3xl font-semibold">
-              Edit Admin Profile
+              Edit User Profile
             </h1>
             <div className="absolute flex justify-end items-end w-full pr-2">
               <button

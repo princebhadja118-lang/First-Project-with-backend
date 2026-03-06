@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../assets/rklogo-removebg-preview.png";
 
-const Home = () => {
+const DHome = () => {
   return (
     <div className="md:h-250">
       <div className="bg-red-500">
@@ -22,4 +22,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default DHome;

@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import logo from "../../assets/rklogo-removebg-preview.png";
-import Home from "./Home";
+import Home from "./DHome";
 import About from "./About";
 import Products from "./Products";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Dashboard = () => {
   const { logout, user } = useContext(AuthContext);
